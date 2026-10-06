@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BrandGuard - Social & App Monitoring</title>
+<style>
+:root{--bg:#e9eef2;--panel:#fff;--ink:#14212b;--mute:#5b6b7a;--line:#cfd8df;--accent:#0f6b73;--high:#b3261e;--med:#b45f06;--low:#4f6272}
+@media(prefers-color-scheme:dark){:root{--bg:#10181e;--panel:#18232b;--ink:#e6edf2;--mute:#93a3b0;--line:#2b3a45;--accent:#4fc3cc;--high:#ff7a70;--med:#f0a04b;--low:#9db0bf}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "IBM Plex Sans",system-ui,sans-serif;display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+nav{padding:28px 20px;border-right:1px solid var(--line);position:sticky;top:0;height:100vh}
+nav h1{font:700 22px/1.2 Georgia,serif;margin:0 0 4px}nav p{color:var(--mute);margin:0 0 28px;font-size:13px}
+nav button{display:block;width:100%;text-align:left;background:none;border:0;border-left:3px solid transparent;padding:10px 12px;color:var(--ink);font:inherit;cursor:pointer}
+nav button.on{border-color:var(--accent);background:var(--panel);font-weight:600}
+main{padding:28px 36px;max-width:980px}h2{font:700 24px Georgia,serif;margin:0 0 6px}.sub{color:var(--mute);margin:0 0 22px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px;margin-bottom:14px}
+label{display:block;font-weight:600;margin:12px 0 4px}small{color:var(--mute);font-weight:400}
+input,textarea,select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font:inherit}
+textarea{min-height:70px;font-family:ui-monospace,monospace;font-size:13px}
+button.btn{background:var(--accent);color:#fff;border:0;border-radius:4px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer}
+button.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.msg{padding:10px 12px;border-radius:4px;margin:10px 0;font-size:14px}.err{background:#b3261e22;border:1px solid var(--high)}.warn{background:#b45f0622;border:1px solid var(--med)}.ok{background:#0f6b7322;border:1px solid var(--accent)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{font-size:13px;padding:3px 10px;border-radius:12px;border:1px solid var(--line)}.chip.bad{border-color:var(--med);color:var(--med)}
+.hit{display:grid;grid-template-columns:1fr 150px;gap:14px}.hit h3{margin:0;font-size:17px}.meta{color:var(--mute);font-size:13px}
+.gauge{height:10px;background:linear-gradient(90deg,var(--line) 0 25%,#0000 25%);position:relative;border:1px solid var(--line);border-radius:5px;margin-top:6px}
+.gauge i{position:absolute;left:0;top:0;bottom:0;border-radius:4px}.gauge b{position:absolute;top:-3px;bottom:-3px;width:1px;background:var(--mute)}
+.score{font:700 28px Georgia,serif}.high{color:var(--high)}.medium{color:var(--med)}.low{color:var(--low)}
+ul.why{margin:10px 0 0;padding-left:18px}ul.why li{margin:2px 0}ul.why span{color:var(--mute);font-variant-numeric:tabular-nums}
+.stats{display:flex;gap:26px;flex-wrap:wrap;margin:8px 0 14px}.stats div{font-size:13px;color:var(--mute)}.stats strong{display:block;font:700 22px Georgia,serif;color:var(--ink)}
+.dismissed{opacity:.5}@media(max-width:760px){body{grid-template-columns:1fr}nav{position:static;height:auto;border:0}.cols,.hit{grid-template-columns:1fr}main{padding:18px}}
+@media(prefers-reduced-motion:no-preference){.gauge i{transition:width .5s}}
+</style></head><body>
+<nav><h1>BrandGuard</h1><p>Social and app-store impersonation monitoring</p>
+<button data-t="profile" class="on">1. Brand profile</button><button data-t="findings">2. Scan and findings</button><button data-t="check">3. Quick name check</button></nav>
+<main>
+<section id="profile"><h2>Brand profile</h2><p class="sub">Tell us what is genuinely yours. Everything listed here is never flagged, and everything else is compared against it.</p>
+<div class="card"><div class="row" style="margin:0"><button class="btn ghost" id="demo">Load Acme Bank demo</button></div>
+<div class="cols"><div><label>Brand name</label><input id="name" placeholder="Acme Bank">
+<label>Other names <small>comma separated</small></label><input id="aliases" placeholder="AcmeBank, Acme">
+<label>Official domains <small>comma separated</small></label><input id="domains" placeholder="acmebank.com">
+<label>Names that look similar but are not you <small>comma separated allow-list</small></label><input id="benign" placeholder="Acme Bakery"></div>
+<div><label>Official logo <small>fingerprint is computed in your browser</small></label><input type="file" id="logo" accept="image/*">
+<div class="meta" id="logoinfo"></div>
+<label>Official publishers <small>comma separated, app stores</small></label><input id="devs" placeholder="Acme Bank Ltd"></div></div>
+<label>Official social accounts <small>one per line: platform: handle (instagram, x, facebook, linkedin, tiktok, youtube)</small></label><textarea id="social" placeholder="instagram: acmebank"></textarea>
+<label>Official apps <small>one per line: play or appstore | app id | app name | publisher</small></label><textarea id="apps" placeholder="play | com.acmebank.mobile | Acme Bank | Acme Bank Ltd"></textarea>
+<div id="pmsg"></div><div class="row"><button class="btn" id="save">Save profile</button></div></div></section>
+
+<section id="findings" hidden><h2>Scan and findings</h2><p class="sub">Each finding lists why it was flagged. Mark it confirmed or dismiss it, and your decision is kept on the next scan.</p>
+<div class="row" style="margin:0 0 12px"><button class="btn" id="scan">Run scan</button>
+<select id="fk" style="width:auto"><option value="">All types</option><option value="social">Social</option><option value="app">Apps</option></select>
+<select id="fs" style="width:auto"><option value="">All severities</option><option>high</option><option>medium</option><option>low</option></select>
+<select id="fst" style="width:auto"><option value="">All statuses</option><option>new</option><option>confirmed</option><option>dismissed</option></select></div>
+<div id="summary"></div><div id="list"></div></section>
+
+<section id="check" hidden><h2>Quick name check</h2><p class="sub">Test any account or app name against your profile, for example "Acme  Bank", "Acm3 B@nk" or "Acme Bank Support".</p>
+<div class="card"><div class="cols"><div><label>Type</label><select id="ck"><option value="social">Social account</option><option value="app">Mobile app</option></select>
+<label>Display name</label><input id="cn"></div><div><label>Handle or app id</label><input id="ch"><label>Publisher <small>apps only</small></label><input id="cd"></div></div>
+<div class="row"><button class="btn" id="cgo">Check</button></div><div id="cres"></div></div></section>
+</main>
+<script>
+const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const api=async(p,m='GET',b)=>{const r=await fetch(p,{method:m,headers:{'Content-Type':'application/json'},body:b?JSON.stringify(b):undefined});return{ok:r.ok,d:await r.json()}};
+let logo={hash:'',data:''};
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));
+ ['profile','findings','check'].forEach(s=>$(s).hidden=s!==b.dataset.t);if(b.dataset.t==='findings')load()});
+const csv=s=>s.split(',').map(x=>x.trim()).filter(Boolean),lines=s=>s.split('\n').map(x=>x.trim()).filter(Boolean);
+function fill(b){$('name').value=b.name||'';$('aliases').value=(b.aliases||[]).join(', ');$('domains').value=(b.domains||[]).join(', ');$('benign').value=(b.benign_names||[]).join(', ');
+ $('devs').value=(b.official_developers||[]).join(', ');$('social').value=(b.official_social||[]).map(a=>`${a.platform}: ${a.handle}`).join('\n');
+ $('apps').value=(b.official_apps||[]).map(a=>[a.store,a.app_id,a.name,a.developer].join(' | ')).join('\n');
+ logo={hash:b.logo_hash||'',data:b.logo_data||''};$('logoinfo').innerHTML=logo.hash?`Logo fingerprint ready: <code>${esc(logo.hash)}</code>`:'No logo yet, logo matching is off.'}
+function aHash(img){const c=document.createElement('canvas');c.width=c.height=8;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,8,8);x.drawImage(img,0,0,8,8);
+ const d=x.getImageData(0,0,8,8).data,g=[];for(let i=0;i<64;i++)g.push(.299*d[i*4]+.587*d[i*4+1]+.114*d[i*4+2]);const m=g.reduce((a,b)=>a+b)/64;
+ const bits=g.map(v=>v>m?1:0).join('');let h='';for(let i=0;i<64;i+=4)h+=parseInt(bits.slice(i,i+4),2).toString(16);return h}
+$('logo').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{logo={hash:aHash(im),data:r.result};
+ $('logoinfo').innerHTML=`Logo fingerprint ready: <code>${logo.hash}</code>`};im.src=r.result};r.readAsDataURL(f)};
+function collect(){return{name:$('name').value,aliases:csv($('aliases').value),domains:csv($('domains').value),benign_names:csv($('benign').value),official_developers:csv($('devs').value),
+ official_social:lines($('social').value).map(l=>{const[p,...h]=l.split(':');return{platform:p,handle:h.join(':')}}),
+ official_apps:lines($('apps').value).map(l=>{const[store,app_id,name,developer]=l.split('|').map(x=>x.trim());return{store,app_id,name,developer}}),logo_hash:logo.hash,logo_data:logo.data}}
+function pmsg(r){let h='';(r.d.errors||[]).forEach(e=>h+=`<div class="msg err">${esc(e)}</div>`);(r.d.warnings||[]).forEach(e=>h+=`<div class="msg warn">${esc(e)}</div>`);
+ if(r.ok)h=`<div class="msg ok">Profile saved. Go to Scan and findings to run a scan.</div>`+h;$('pmsg').innerHTML=h}
+$('save').onclick=async()=>pmsg(await api('/api/brand','PUT',collect()));
+$('demo').onclick=async()=>{const r=await api('/api/demo','POST',{});fill(r.d.brand);pmsg(r)};
+function gauge(s,sev){return`<div class="gauge" title="Flag thresholds: 25 low, 45 medium, 70 high"><i class="${sev}" style="width:${s}%;background:var(--${sev==='medium'?'med':sev})"></i><b style="left:25%"></b><b style="left:45%"></b><b style="left:70%"></b></div>`}
+function reasons(rs){return`<ul class="why">${rs.map(r=>`<li>${esc(r.text)} <span>+${r.points}</span></li>`).join('')}</ul>`}
+async function load(){const q=new URLSearchParams({kind:$('fk').value,severity:$('fs').value,status:$('fst').value});[...q].forEach(([k,v])=>!v&&q.delete(k));
+ const r=await api('/api/detections?'+q);const ls=r.d.last_scan;$('summary').innerHTML=ls?`<div class="stats"><div><strong>${ls.stats.scanned}</strong>profiles and apps reviewed</div><div><strong>${ls.stats.excluded_official}</strong>official assets skipped</div>
+ <div><strong>${ls.counts.high}/${ls.counts.medium}/${ls.counts.low}</strong>high / medium / low</div></div><div class="chips">${ls.sources.map(s=>s.ok?`<span class="chip">${esc(s.name)}: ${s.count} checked</span>`:`<span class="chip bad" title="${esc(s.error)}">${esc(s.name)}: unavailable. ${esc(s.error)}</span>`).join('')}</div>`:'<div class="msg warn">No scan yet. Save your brand profile, then run a scan.</div>';
+ $('list').innerHTML=r.d.items.map(d=>`<div class="card ${d.status==='dismissed'?'dismissed':''}"><div class="hit"><div><h3>${esc(d.name)} <span class="meta">${d.kind==='app'?esc(d.platform==='play'?'Google Play':'App Store'):esc(d.platform)} · ${esc(d.handle||d.app_id)}</span></h3>
+ <div class="meta">${d.kind==='app'?`Publisher: ${esc(d.developer)} · Installs: ${esc(d.installs||'n/a')}`:`${esc(d.followers)} followers · ${d.verified?'verified':'unverified'} · ${d.created_days} days old`}</div>${reasons(d.reasons)}</div>
+ <div><div class="score ${d.severity}">${d.score}</div><div class="meta">${d.severity} risk · ${d.status}</div>${gauge(d.score,d.severity)}
+ <div class="row"><button class="btn ghost" onclick="st(${d.id},'confirmed')">Confirm</button><button class="btn ghost" onclick="st(${d.id},'dismissed')">Dismiss</button>${d.status!=='new'?`<button class="btn ghost" onclick="st(${d.id},'new')">Reopen</button>`:''}</div></div></div></div>`).join('')||(ls?'<div class="msg ok">Nothing matches these filters.</div>':'')}
+window.st=async(i,s)=>{await api(`/api/detections/${i}/status`,'POST',{status:s});load()};
+$('scan').onclick=async()=>{$('scan').disabled=true;const r=await api('/api/scan','POST',{});$('scan').disabled=false;if(!r.ok)$('summary').innerHTML=`<div class="msg err">${esc(r.d.error)}</div>`;else load()};
+['fk','fs','fst'].forEach(i=>$(i).onchange=load);
+$('cgo').onclick=async()=>{const k=$('ck').value;const r=await api('/api/check','POST',{kind:k,name:$('cn').value,handle:k==='social'?$('ch').value:'',app_id:k==='app'?$('ch').value:'',developer:$('cd').value,platform:k==='app'?'play':'instagram'});
+ $('cres').innerHTML=!r.ok?`<div class="msg err">${esc(r.d.error)}</div>`:r.d.official?'<div class="msg ok">This is one of your official assets.</div>':r.d.severity?`<div class="score ${r.d.severity}">${r.d.score} · ${r.d.severity} risk</div>${reasons(r.d.reasons)}`:'<div class="msg ok">Not flagged. No meaningful similarity to your brand.</div>'};
+(async()=>{const r=await api('/api/brand');if(r.d.name)fill(r.d)})();
+</script></body></html>

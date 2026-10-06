@@ -1,0 +1,8 @@
+{"name": "Acme Bank", "aliases": ["AcmeBank"], "domains": ["acmebank.com"],
+ "official_social": [{"platform": "instagram", "handle": "acmebank"}, {"platform": "x", "handle": "AcmeBank"},
+                     {"platform": "facebook", "handle": "AcmeBankOfficial"}, {"platform": "linkedin", "handle": "acme-bank"}],
+ "official_apps": [{"store": "play", "app_id": "com.acmebank.mobile", "name": "Acme Bank", "developer": "Acme Bank Ltd",
+                    "description": "Check balances, transfer money, pay bills and manage your Acme Bank cards securely from your phone."},
+                   {"store": "appstore", "app_id": "1234567890", "name": "Acme Bank", "developer": "Acme Bank Ltd",
+                    "description": "Check balances, transfer money, pay bills and manage your Acme Bank cards securely from your phone."}],
+ "official_developers": ["Acme Bank Ltd"], "benign_names": ["Acme Bakery"], "logo_hash": "e7c3c3dbdbc3c3e7"}

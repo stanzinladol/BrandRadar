@@ -1,0 +1,9 @@
+[
+{"store":"play","app_id":"com.acmebank.mobile","name":"Acme Bank","developer":"Acme Bank Ltd","description":"Check balances, transfer money, pay bills and manage your Acme Bank cards securely from your phone.","installs":"5M+","logo_hash":"e7c3c3dbdbc3c3e7"},
+{"store":"appstore","app_id":"1234567890","name":"Acme Bank","developer":"Acme Bank Ltd","description":"Check balances, transfer money, pay bills and manage your Acme Bank cards securely from your phone.","installs":"","logo_hash":"e7c3c3dbdbc3c3e7"},
+{"store":"play","app_id":"com.quickapps.acmesecure","name":"Acme Bank Secure Login","developer":"Quick Apps Studio","description":"Login to check balances, transfer money, pay bills and manage your Acme Bank cards. Verify your account now.","installs":"10K+","logo_hash":"e7c3c3dbdbc3c1e5"},
+{"store":"play","app_id":"com.freetools.acmebankmobile","name":"AcmeBank Mobile","developer":"FreeTools Dev","description":"Manage your cards, pay bills and transfer money from your phone.","installs":"1K+","logo_hash":"e8c3c3dbd4c3c3e7"},
+{"store":"appstore","app_id":"9988776655","name":"Acme Bnak Pay","developer":"Acme Bank Limited Services","description":"Transfer money and pay bills instantly. Loan approval in minutes. Send us your details.","installs":"","logo_hash":"e7c3c3dbdbc3c1e7"},
+{"store":"play","app_id":"com.calclabs.acmecalc","name":"Acme Calculator","developer":"Calc Labs","description":"A simple scientific calculator for students.","installs":"100K+","logo_hash":"5a5a5a5a5a5a5a5a"},
+{"store":"appstore","app_id":"5544332211","name":"Bakery Planner","developer":"Acme Bakery Pune","description":"Plan daily bakes and orders.","installs":"","logo_hash":"3c3c3c3cffff0000"}
+]
